@@ -25,5 +25,9 @@
 
 (define
   (phase1)
-  (map simulate (io:read_parse "SEC1_DATA.txt" 3))
+  (
+   io:write_output
+   (map simulate (io:read_parse "DATA_SEC1.txt" 3))
+   "RESULT_SEC1.txt"
+   )
   )
