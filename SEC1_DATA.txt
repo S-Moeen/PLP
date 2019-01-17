@@ -1,0 +1,12 @@
+a:(1,null, 100, null, 0)
+b:(5,null, 4, null, 2)
+c:(1,null, 100, null, 0)
+
+
+
+
+
+
+a:(1,null, 100, null, 0)
+b:(null,null, null, -15, null)
+c:(1,null, 100, -15, 0)

@@ -1,0 +1,29 @@
+#lang racket
+(require "parts.rkt")
+(require (prefix-in io:"io.rkt"))
+
+(define
+  (simulate lst)
+  (
+   let*
+       (
+        [a (car lst)]
+        [b (cadr lst)]
+        [c (caddr lst)]
+        [node_a (get_simple_source a)]
+        [core (get_replicator_node node_a)]
+        [sync (get_sync node_a)]
+        [sync_drain (get_sync_drain node_a)]
+        [node_b (get_dest b (listify sync_drain))]
+        [node_c (get_dest c (listify sync))]
+        [nodes (list node_a node_b node_c)]
+        )
+     (check_nodes nodes)
+    
+   )
+  )
+
+(define
+  (phase1)
+  (map simulate (io:read_parse "SEC1_DATA.txt" 3))
+  )
