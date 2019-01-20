@@ -1,0 +1,39 @@
+a:(1,null, 100, null, 0)
+b:(5,null, 4, null, 2)
+c:(1,null, 100, null, 0)
+
+
+
+
+a:(1,null, 100, null, 0)
+b:(null,null, null, -15, null)
+c:(1,null, 100, -15, 1)
+
+a:(1,null, 100, null, 0)
+b:(5,null, 4, 4, 2)
+c:(1,null, 100, null, 0)
+
+a:(1,null, 100, null, 0)
+b:(5,null, 4, null, 2)
+c:(1,null, 100, null, 0)
+
+a:(5,null, 4, null, 2)
+b:(5,null, 4, null, 2)
+c:(1,null, 100, null, 0)
+
+a:(5,null, 4, null, 2)
+b:(5,null, 4, null, 2)
+c:(null,5, null, null, 4)
+
+a:("hello",null,"hello",null, null)
+b:("world", null, "world",null, null)
+c:("hello", "world","hello", "world", null)
+
+a: ("a" , "b", null, null, "c")
+b: ("d" , "e", null, null, "f")
+c: ("a","d",null,  "e","c")
+
+
+a: ("a" , null, "b", null, "c")
+b: ("d" ,null, "e", null, "f")
+c: ("a","d","b",  "e","c")

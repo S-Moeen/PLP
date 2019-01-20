@@ -3,7 +3,7 @@
 (require 2htdp/batch-io)
 (define null 'null)
 
-(define (my_trim lst) (map (lambda (x) (string-replace (string-replace (string-replace x " " "") "(" "") ")" "")) lst))
+(define (my_trim lst) (map (lambda (x) (string-replace (string-replace (string-replace (string-replace x "\"" "") " " "") "(" "") ")" "")) lst))
 ;removes "(",")" and " "
 
 (define (make_dict lst) (map (lambda (x) (cdr (regexp-split #rx":|," x))) lst) )

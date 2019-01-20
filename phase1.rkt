@@ -13,12 +13,13 @@
         [node_a (get_simple_source a)]
         [core (get_replicator_node node_a)]
         [sync (get_sync node_a)]
-        [sync_drain (get_sync_drain node_a)]
-        [node_b (get_dest b (listify sync_drain))]
-        [node_c (get_dest c (listify sync))]
+        [sync_drain (get_sync_drain node_a (setify b))]
+        [node_b (get_dest b (list sync_drain))]
+        [node_c (get_dest c (list sync))]
         [nodes (list node_a node_b node_c)]
         )
      (check_nodes nodes)
+
     
    )
   )
