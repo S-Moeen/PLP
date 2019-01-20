@@ -4,9 +4,6 @@
 (define null 'null)
 (define setify (lambda (x) (list->set (cons x '())) ))
 (define listify (lambda (x) (list->set (cons x '())) ))
-(define get_firsts (lambda (x) (if (equal? x null) null (car x)) ) )
-(define get_seconds (lambda (x) (if (equal? x null) null (cadr x)) ) )
-(define check_validators (lambda (state validators) (foldl (lambda (validator prev) (and prev (validator state)) ) #t validators)))
 (define check_nodes (lambda (nodes) (foldl (lambda (node prev) (and (not (equal? (node) (set))) #t) ) #t nodes)))
 (define
   (multiple_intersect lst)
@@ -40,13 +37,6 @@
     )
   )
 
-(define (get_simple_dest state)
-  ;it gets a list as a state for node
-  (lambda
-      ()
-    (setify state)
-    )
-  )
 
 (define (get_dest state validators)
   ;it gets a list as a state for node
@@ -73,37 +63,6 @@
   source
   )
 
-;(define (get_join_node state validator1 validator2 other_validators)
-;  (lambda
-;      ()
-;   (let (
-;       [s1 (map get_firsts state)]
-;       [s2 (map get_seconds state)]
-;       )
-;(if (and (check_validators state other_validators)
-;           (validator1 s1)
-;           (validator2 s2)           
-;           )
-;  state
-;  #f)
-;    )
-;   )
-; )
-
-
-;(define (get_merger_node state validator1 validator2 other_validators)
-;  (lambda
-;      ()
-;    ;if both are null 
-;  (if (and (check_validators state other_validators)
-;           (validator1 state)
-;           (validator2 state)           
-;           )
-;  state
-;  #f)
-;   )
-; )
-
 ;**************************************************************************************
 ;**************************************************************************************
 ;**************************************************************************************
@@ -113,7 +72,6 @@
 ;**************************************************************************************
 
 (define (get_sync input)
-  ;it gets its input and output in a list as nodes
   (lambda
       ()
     (input)
@@ -128,7 +86,6 @@
          )
   )
 (define (get_sync_drain input1 states)
-  ;it gets its input and output in a list as nodes
   (lambda
       ()
     (list->set (foldl
@@ -219,38 +176,6 @@
   
 
 
-
-;**************************************************************************************
-;**************************************************************************************
-;**************************************************************************************
-;                                    Block
-;**************************************************************************************
-;**************************************************************************************
-;**************************************************************************************
-
-(define get_merger_block
-  (lambda
-      (state source_node1 source_node2 validators)
-    (get_dest state (cons (get_merger_channel source_node1 source_node2) validators) )
-    )
-  )
-
-
-(define get_join_block
-  (lambda
-      (state source_node1 source_node2 validators)
-    (get_dest state (cons (get_join_channel source_node1 source_node2) validators))
-    )
-  )
-
-(define get_replicator_block
-  (lambda
-      (state1 state2 source_node validators)
-    (cons (get_dest state1 (cons (get_sync source_node) validators)) (get_dest state2 (cons (get_sync source_node) validators)))
-    )
-  )
-
-
 ;**************************************************************************************
 ;**************************************************************************************
 ;**************************************************************************************
@@ -270,63 +195,4 @@
 (define simple_source6 (get_simple_source (list null null null 3 null) ))
 
 
-(define simple_dest1 (get_simple_dest (list 1 2 null 4 5) ))
-(define simple_dest2 (get_simple_dest (list 1 2 3 4 5) ))
-(define simple_dest3 (get_simple_source (list 1 6 3 4 null) ))
-(define simple_dest4 (get_simple_source (list 9 3 3 4 null) ))
-(define simple_dest5 (get_simple_source (list '(1 9) '(6 3) '(3 3) '(4 4) null) ))
 
-
-(define valid_sync (get_sync (list simple_source1 simple_dest1 )))
-(define invalid_sync (get_sync (list simple_source1 simple_dest2 )))
-(define valid_sync_drain (get_sync_drain simple_source3 simple_dest4 ))
-;(define invalid_sync_drain (get_sync_drain (list simple_source1 simple_dest3 )))
-
-;(define sync (get_sync simple_source1))
-;(define dest (get_dest (list 1 2 null 4 5) sync))
-
-
-
-;(define a (get_simple_source (list 1 null 100 -10 0)))
-;(define core (get_replicator_node a))
-;(define sync (get_sync a))
-;(define sync_drain (get_sync_drain a))
-;(define b (get_dest (list 1 null -200 -15 20) (listify sync_drain)))
-;(define c (get_dest (list 1 null 100 -10 0) (listify sync)))
-
-;(phase1 (list 1 null 100 -10 0) (list 1 null -200 -15 20) (list 1 null 100 -10 0) )
-
-;(define a (get_simple_source (list 1 null null -10 null)))
-;(define fif (get_fifo1 a))
-;(define b (get_dest (list null null 1 null -10) (listify fif)))
-
-;(define a (get_simple_source (list 1 null null -10 null)))
-;(define b (get_simple_source (list null 2 3 null 12)))
-;(define c (get_merger_block (list 1 2 4 -10 12) a b '()))
-
-;(define c (get_dest (list '(1 9) '(6 3) '(3 3) '(4 4) null) (list (get_join_channel simple_source3 simple_source4))))
-
-
-;validjoin
-;(define c (get_dest (list '(1 9) '(6 3) '(3 3) '(4 4) null) (list (get_join_channel simple_source3 simple_source4 )) ) )
-;invalid join
-;(define c (get_dest (list '(1 9) '(3 3) '(3 3) '(4 4) null) (list (get_join_channel simple_source3 simple_source4 )) ) )
-
-;valid sync
-;(define c (get_dest (list 1 2 3 4 5) (list (get_sync simple_source2)) ) )
-;invalid sync
-; (define c (get_dest (list 1 2 3 4 3) (list (get_sync simple_source2)) ) )
-
-;valid sync_drain
-;(define c (get_dest (list 1 6 3 4 null) (list (get_sync_drain simple_source4 (set (list 1 6 3 4 null))) ) ))
-;invalid sync_drain
-;(define c (get_dest (list 1 6 null 4 null) (list (get_sync_drain simple_source4 (set (list 1 6 3 4 null))) ) ))
-
-;valid merger
-;(define c (get_dest (list 1 2 3 4 5) (list (get_merger_channel simple_source1 simple_source2  ) )))
-;invalid merger
-;(define c (get_dest (list 3 2 3 4 5) (list (get_merger_channel simple_source1 simple_source2  ) )))
-
-;valid fifo1
-;(define c (get_dest (list null null null 3 null) (list (get_fifo1 simple_source5) )))
-;(define c (get_dest (list null null null 4 null) (list (get_fifo1 simple_source5) )))
